@@ -1,14 +1,8 @@
-import { Observable, switchMap } from 'rxjs';
+import { catchError, EMPTY, Observable, switchMap } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { ComponentStore } from '../../shared/utils/component-store.utils';
-
-export interface Person {
-    id: string;
-    firstName: string;
-    lastName: string;
-    age: number;
-}
+import { AuthenticatedUser } from '../../shared/types/authenticated-user.types';
+import { authenticatedUserService } from '../../shared/services/authenticated-user.service';
 
 export interface ErrorState {
     message: string;
@@ -16,48 +10,61 @@ export interface ErrorState {
 }
 
 export interface ProgressState {
+    inProgress: boolean;
     message: string;
 }
 
-export interface PeopleState {
-    people: Person[];
+export interface AuthenticatedState {
+    authenticationAttempted?: boolean;
+    authenticationFailed?: boolean;
+    authenticatedUser?: AuthenticatedUser;
     errorState?: ErrorState;
     progressState?: ProgressState;
 }
 
-export class PeopleStore extends ComponentStore<PeopleState> {
-    updatePeople(people: Person[]) {
-        this.setState((prevState: PeopleState) => {
-            return { ...prevState, people: people }
+export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
+    setProgressState(progressState: ProgressState) {
+        this.setState((prevState: AuthenticatedState) => {
+            return { ...prevState, progressState }
         });
     }
 
-    addPerson(person: Person) {
-        this.setState((prevState: PeopleState) => {
-            return { ...prevState, people: [...prevState.people, person] }
+    clearProgressState() {
+        this.setState((prevState: AuthenticatedState) => {
+            return {
+                ...prevState, progressState: {
+                    inProgress: false,
+                    message: ''
+                }
+            }
         });
     }
 
-    loadPeopleBatch1 = this.effect<void>((origin$: Observable<void>) => {
-        return origin$.pipe(
-            switchMap(() => {
-                return fromPromise(fetch('/data/people-batch-1.json'))
-            }),
-            switchMap((data) => fromPromise(data.json() as Promise<Person[]>)),
-            tap((people: Person[]) => {
-                this.updatePeople(people);
-            })
-        );
-    });
+    setAuthenticatedUser(authenticatedUser: AuthenticatedUser) {
+        this.setState((prevState: AuthenticatedState) => {
+            return { ...prevState, authenticatedUser }
+        });
+    }
 
-    loadPeopleBatch2 = this.effect<void>((origin$: Observable<void>) => {
+    fetchAuthenticatedUser = this.effect<void>((origin$: Observable<void>) => {
         return origin$.pipe(
             switchMap(() => {
-                return fromPromise(fetch('/data/people-batch-2.json'))
+                this.setProgressState({ inProgress: true, message: 'Checking authentication' });
+
+                return authenticatedUserService.getAuthenticatedUser().pipe(
+                    catchError((error) => {
+                        this.clearProgressState();
+
+                        console.error(error);
+                        return EMPTY;
+                    })
+                )
             }),
-            switchMap((data) => fromPromise(data.json() as Promise<Person[]>)),
-            tap((people: Person[]) => {
-                this.updatePeople(people);
+            tap((authenticatedUser: AuthenticatedUser) => {
+                console.log('Authenticated user: %O', authenticatedUser);
+
+                this.clearProgressState();
+                this.setAuthenticatedUser(authenticatedUser);
             })
         );
     });
