@@ -1,15 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
-import App from './app/App';
 import reportWebVitals from './reportWebVitals';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { Public } from './app/features/public/Public';
+import { Authenticated } from './app/features/authenticated/Authenticated';
+import { App } from './app/App';
+
+const router = createBrowserRouter([
+    {
+        path: "/", element: <App />, children: [
+            { path: "", element: <Navigate to="public" /> },
+            { path: "public", element: <Public /> },
+            { path: "authenticated", element: <Authenticated /> },
+        ]
+    },
+]);
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
     <React.StrictMode>
-        <App/>
+        <RouterProvider router={router} />
     </React.StrictMode>
 );
 
