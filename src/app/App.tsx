@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.scss';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Primary, Secondary } from '@churchofjesuschrist/eden-buttons';
 
 export function App() {
     const navigate = useNavigate();
@@ -19,8 +20,8 @@ export function App() {
                 <Link to="/public">Public</Link> | <Link to="/authenticated">Authenticated</Link>
             </div>
             <div>
-                <button onClick={publicClickHandler}>Public</button>
-                <button onClick={authenticatedClickHandler}>Authenticated</button>
+                <Primary onClick={publicClickHandler}>Public</Primary>
+                <Secondary onClick={authenticatedClickHandler}>Authenticated</Secondary>
             </div>
 
             <Outlet />

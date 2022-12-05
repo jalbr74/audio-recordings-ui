@@ -6,6 +6,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { Public } from './app/features/public/Public';
 import { Authenticated } from './app/features/authenticated/Authenticated';
 import { App } from './app/App';
+import Normalize from '@churchofjesuschrist/eden-normalize';
 
 const router = createBrowserRouter([
     {
@@ -22,6 +23,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <React.StrictMode>
+        <Normalize />
         <RouterProvider router={router} />
     </React.StrictMode>
 );
