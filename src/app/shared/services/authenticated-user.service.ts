@@ -1,5 +1,5 @@
 import { map, Observable, switchMap, tap } from 'rxjs';
-import { AuthenticatedUser } from '../types/authenticated-user.types';
+import { AuthenticatedUser } from './authenticated-user.types';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 export class AuthenticatedUserService {

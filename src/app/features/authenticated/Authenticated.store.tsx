@@ -1,7 +1,7 @@
 import { catchError, EMPTY, Observable, switchMap } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ComponentStore } from '../../shared/utils/component-store.utils';
-import { AuthenticatedUser } from '../../shared/types/authenticated-user.types';
+import { AuthenticatedUser } from '../../shared/services/authenticated-user.types';
 import { authenticatedUserService } from '../../shared/services/authenticated-user.service';
 
 export interface ErrorState {
