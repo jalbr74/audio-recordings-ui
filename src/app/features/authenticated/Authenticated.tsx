@@ -20,7 +20,8 @@ export function Authenticated() {
 
     if (state.authenticationFailed) {
         // Couldn't authenticate. Redirect to the public login page:
-        navigate('/public/login')
+        navigate('/public/login');
+        return (<div>Redirecting...</div>);
     }
 
     return <Outlet></Outlet>;

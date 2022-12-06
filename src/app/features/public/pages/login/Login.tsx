@@ -2,7 +2,7 @@ import { Primary, Secondary } from '@churchofjesuschrist/eden-buttons';
 
 export function Login() {
     function loginHandler() {
-        window.location.href = '/api/users/login';
+        window.document.location = '/api/users/login';
     }
 
     return (
