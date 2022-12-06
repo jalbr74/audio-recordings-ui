@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AuthenticatedState, AuthenticatedStore } from './Authenticated.store';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 export function Authenticated() {
     const [state, setState] = useState<AuthenticatedState>({});
@@ -15,5 +16,17 @@ export function Authenticated() {
         return () => subscription.unsubscribe();
     }, [store]);
 
-    return <div>Authenticated works!</div>;
+    const navigate = useNavigate();
+
+    if (state.authenticationFailed) {
+        // Couldn't authenticate. Redirect to the public login page:
+        navigate('/public/login')
+    }
+
+    return <Outlet></Outlet>;
 }
+
+// TODO: Investigate using custom hooks for the store (see: https://youtu.be/MFj_S0Nof90):
+// function useStore<T>(setState: React.Dispatch<React.SetStateAction<T>>) {
+//
+// }

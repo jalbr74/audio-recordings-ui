@@ -1,6 +1,7 @@
 declare module '@churchofjesuschrist/eden-buttons' {
-    export function Primary(props: any): any;
-    export function Secondary(props: any): any;
+    // These button props definitions mimic react's IntrinsicElements.button found in react/index.d.ts:
+    export function Primary (props: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>): any;
+    export function Secondary(props: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>): any;
 }
 
 declare module '@churchofjesuschrist/eden-normalize' {

@@ -1,4 +1,5 @@
+import { Outlet } from 'react-router-dom';
 
 export function Public() {
-    return <div>Public works!</div>;
+    return <Outlet />;
 }

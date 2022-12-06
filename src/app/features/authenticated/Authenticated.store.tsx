@@ -46,6 +46,12 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
         });
     }
 
+    setAuthenticationFailed() {
+        this.setState((prevState: AuthenticatedState) => {
+            return { ...prevState, authenticationFailed: true }
+        });
+    }
+
     fetchAuthenticatedUser = this.effect<void>((origin$: Observable<void>) => {
         return origin$.pipe(
             switchMap(() => {
@@ -54,8 +60,8 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
                 return authenticatedUserService.getAuthenticatedUser().pipe(
                     catchError((error) => {
                         this.clearProgressState();
+                        this.setAuthenticationFailed();
 
-                        console.error(error);
                         return EMPTY;
                     })
                 )

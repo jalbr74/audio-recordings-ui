@@ -2,21 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import { Public } from './app/features/public/Public';
-import { Authenticated } from './app/features/authenticated/Authenticated';
-import { App } from './app/App';
+import { RouterProvider } from 'react-router-dom';
 import Normalize from '@churchofjesuschrist/eden-normalize';
-
-const router = createBrowserRouter([
-    {
-        path: "/", element: <App />, children: [
-            { path: "", element: <Navigate to="public" /> },
-            { path: "public", element: <Public /> },
-            { path: "authenticated", element: <Authenticated /> },
-        ]
-    },
-]);
+import { router } from './index-routing';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
