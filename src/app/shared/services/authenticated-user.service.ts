@@ -1,5 +1,5 @@
 import { map, Observable, switchMap, tap } from 'rxjs';
-import { AuthenticatedUser } from './authenticated-user.types';
+import { AuthenticatedUser, AuthenticationError } from './authenticated-user.types';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 export class AuthenticatedUserService {
@@ -13,7 +13,7 @@ export class AuthenticatedUserService {
         };
     }
 
-    getAuthenticatedUser(): Observable<AuthenticatedUser> {
+    getAuthenticatedUser(): Observable<AuthenticatedUser | AuthenticationError> {
         return fromPromise(fetch('/api/users/me')).pipe(
             switchMap((response: Response) => response.json()),
             tap((authenticatedUser: AuthenticatedUser) => {

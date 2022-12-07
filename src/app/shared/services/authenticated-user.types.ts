@@ -32,3 +32,10 @@ export interface AuthenticatedUser {
     languages?: Language[];
     preferences?: Preferences;
 }
+
+export interface AuthenticationError {
+    error: string;
+    timestamp: string;
+    trace: string;
+    path: string;
+}

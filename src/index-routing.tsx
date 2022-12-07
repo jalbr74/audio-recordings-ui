@@ -14,20 +14,15 @@ import { ReviewAssignments } from './app/features/authenticated/pages/review-ass
 import { Users } from './app/features/authenticated/pages/users/Users';
 import { VoiceAssignments } from './app/features/authenticated/pages/voice-assignments/VoiceAssignments';
 import { Login } from './app/features/public/pages/login/Login';
+import { Landing } from './app/features/authenticated/pages/landing/Landing';
 
 export const router: RemixRouter = createBrowserRouter([
     {
         path: '/', element: <App />, children: [
-            { path: '', element: <Navigate to='public' /> },
-            {
-                path: 'public', element: <Public />, children: [
-                    { path: '', element: <Navigate to='login' /> },
-                    { path: 'login', element: <Login /> }
-                ]
-            },
+            { path: '', element: <Navigate to='authenticated' /> },
             {
                 path: 'authenticated', element: <Authenticated />, children: [
-                    { path: '', element: <Navigate to='download' /> },
+                    { path: '', element: <Landing /> },
                     { path: 'download', element: <Download /> },
                     { path: 'import', element: <Import /> },
                     { path: 'record', element: <Record /> },
@@ -36,6 +31,12 @@ export const router: RemixRouter = createBrowserRouter([
                     { path: 'review-assignments', element: <ReviewAssignments /> },
                     { path: 'users', element: <Users /> },
                     { path: 'voice-assignments', element: <VoiceAssignments /> },
+                ]
+            },
+            {
+                path: 'public', element: <Public />, children: [
+                    { path: '', element: <Navigate to='login' /> },
+                    { path: 'login', element: <Login /> }
                 ]
             },
         ]
