@@ -3,7 +3,3 @@ declare module '@churchofjesuschrist/eden-buttons' {
     export function Primary (props: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>): any;
     export function Secondary(props: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>): any;
 }
-
-declare module '@churchofjesuschrist/eden-normalize' {
-    export default function Normalize(props: any): any;
-}
