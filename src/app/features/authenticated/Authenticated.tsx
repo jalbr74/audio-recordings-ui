@@ -1,22 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AuthenticatedState, AuthenticatedStore } from './Authenticated.store';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import './Authenticated.scss';
 import { WorkforceHeader } from '@churchofjesuschrist/eden-workforce-header';
+import { useStore } from '../../shared/utils/component-store.utils';
 
 export function Authenticated() {
     const [state, setState] = useState<AuthenticatedState>({});
-    const [store] = useState(() => new AuthenticatedStore(setState));
-
-    useEffect(() => {
-        // TODO: Why is this called twice in development?
-        console.log('useEffect called');
-
-        const subscription = store.subscribe();
-        store.fetchAuthenticatedUser();
-
-        return () => subscription.unsubscribe();
-    }, [store]);
+    const store = useStore(() => new AuthenticatedStore(setState));
 
     const navigate = useNavigate();
 
