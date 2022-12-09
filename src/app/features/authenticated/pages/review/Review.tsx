@@ -1,4 +1,5 @@
+import './Review.scss';
 
 export function Review() {
-    return <div>Review works!</div>;
+    return <div className="Review">Review works!</div>;
 }

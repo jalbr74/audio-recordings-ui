@@ -1,0 +1,33 @@
+.sub-navigation {
+    display: flex;
+    align-items: stretch;
+    box-shadow: 0 0 6px 0 grey;
+    height: 60px;
+
+    > .sub-navigation__link {
+        display: flex;
+        align-items: stretch;
+        font-size: 13px;
+        margin-left: 32px;
+        border-bottom: 2px solid transparent;
+
+        &:has(a.active) {
+            border-bottom-color: #157493;
+        }
+
+        > a {
+            display: flex;
+            align-items: center;
+            color: #212225;
+            text-decoration: none;
+
+            &:hover, &:active, &:visited {
+                color: #212225;
+            }
+
+            &.active {
+                color: #157493;
+            }
+        }
+    }
+}

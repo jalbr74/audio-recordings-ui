@@ -1,4 +1,5 @@
+import './Reports.scss';
 
 export function Reports() {
-    return <div>Reports works!</div>;
+    return <div className="Reports">Reports works!</div>;
 }

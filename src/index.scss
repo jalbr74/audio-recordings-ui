@@ -13,3 +13,6 @@ body {
     flex-direction: column;
     flex-grow: 1;
 }
+
+@import "scss/eden-extras/global-navigation";
+@import "scss/eden-extras/sub-navigation";

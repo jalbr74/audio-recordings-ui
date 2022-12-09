@@ -1,4 +1,5 @@
+import './Record.scss';
 
 export function Record() {
-    return <div>Record works!</div>;
+    return <div className="Record">Record works!</div>;
 }

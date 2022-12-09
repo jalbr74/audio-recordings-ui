@@ -1,4 +1,5 @@
+import './Landing.scss';
 
 export function Landing() {
-    return <div>Landing works!</div>;
+    return <div className="Landing">Landing works!</div>;
 }

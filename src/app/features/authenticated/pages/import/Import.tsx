@@ -1,4 +1,5 @@
+import './Import.scss';
 
 export function Import() {
-    return <div>Import works!</div>;
+    return <div className="Import">Import works!</div>;
 }

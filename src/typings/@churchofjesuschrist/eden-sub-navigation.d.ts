@@ -6,8 +6,12 @@ declare module '@churchofjesuschrist/eden-sub-navigation' {
         },
 
         /** An array of items to show in a callout. See SubNavigationCallout component for shape. */
-        items?: any[],
+        items?: {
+            text: string;
+            href?: string;
+            current?: boolean;
+        }[],
     }
 
-    export default function SubNavigation(props: SubNavigationProps): any;
+    export default function SubNavigation(props: SubNavigationProps): React.ReactElement;
 }

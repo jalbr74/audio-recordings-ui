@@ -5,5 +5,5 @@ declare module '@churchofjesuschrist/eden-workforce-header' {
         tools?: any;
     }
 
-    export function WorkforceHeader(props: WorkforceHeaderProps): any;
+    export function WorkforceHeader(props: WorkforceHeaderProps): React.ReactElement;
 }

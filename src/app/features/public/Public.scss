@@ -2,30 +2,4 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-
-    .wordmark {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        background-color: #F7F8F8;
-        //box-shadow: 0 -2px 6px -2px grey inset;
-        font-family: "Ensign:Serif", "Georgia", "Times New Roman", serif;
-        font-size: 13px;
-        height: 32px;
-
-        .wordmark--mainLogoLink, .wordmark--mainLogoLink:link, .wordmark--mainLogoLink:visited, .wordmark--mainLogoLink:hover, .wordmark--mainLogoLink:active {
-            color: #53575b;
-            text-decoration: none;
-        }
-    }
-
-    > header {
-        box-shadow: 0 0 4px 0 grey;
-    }
-
-    > nav > div:first-of-type {
-        display: none;
-    }
 }

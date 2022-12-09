@@ -1,4 +1,5 @@
+import './ReviewAssignments.scss';
 
 export function ReviewAssignments() {
-    return <div>ReviewAssignments works!</div>;
+    return <div className="ReviewAssignments">ReviewAssignments works!</div>;
 }
