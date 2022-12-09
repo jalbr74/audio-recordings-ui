@@ -23,6 +23,10 @@ export interface AuthenticatedState {
 }
 
 export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
+    override init() {
+        this.fetchAuthenticatedUser();
+    }
+
     setProgressState(progressState: ProgressState) {
         this.setState((prevState: AuthenticatedState) => {
             return { ...prevState, progressState }
