@@ -4,30 +4,19 @@
     box-shadow: 0 0 6px 0 grey;
     height: 60px;
 
-    > .sub-navigation__link {
+    > a, a:hover, a:active, a:visited {
         display: flex;
-        align-items: stretch;
+        align-items: center;
+
+        border-bottom: 2px solid transparent;
+        color: #212225;
         font-size: 13px;
         margin-left: 32px;
-        border-bottom: 2px solid transparent;
+        text-decoration: none;
 
-        &:has(a.active) {
+        &.active {
             border-bottom-color: #157493;
-        }
-
-        > a {
-            display: flex;
-            align-items: center;
-            color: #212225;
-            text-decoration: none;
-
-            &:hover, &:active, &:visited {
-                color: #212225;
-            }
-
-            &.active {
-                color: #157493;
-            }
+            color: #157493;
         }
     }
 }

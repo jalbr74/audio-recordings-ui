@@ -9,7 +9,7 @@ export function Authenticated() {
     const [store] = useState(() => new AuthenticatedStore(setState));
 
     useEffect(() => {
-        // TODO: Remove this:
+        // TODO: Why is this called twice in development?
         console.log('useEffect called');
 
         const subscription = store.subscribe();
@@ -27,6 +27,7 @@ export function Authenticated() {
             return (<div>Redirecting to login page...</div>);
         }
 
+        // We may just be waiting for the fetch call to finish
         return <div>Checking authentication...</div>;
     }
 
@@ -40,23 +41,18 @@ export function Authenticated() {
                     </a>
                 </div>
                 <WorkforceHeader name="Audio Recordings"/>
-                <div className="sub-navigation">
-                    <div className="sub-navigation__link"><NavLink to="record">Record</NavLink></div>
-                    <div className="sub-navigation__link"><NavLink to="review">Review</NavLink></div>
-                    <div className="sub-navigation__link"><NavLink to="voice-assignments">Voice Assignments</NavLink></div>
-                    <div className="sub-navigation__link"><NavLink to="review-assignments">Review Assignments</NavLink></div>
-                    <div className="sub-navigation__link"><NavLink to="reports">Reports</NavLink></div>
-                    <div className="sub-navigation__link"><NavLink to="users">Users</NavLink></div>
-                    <div className="sub-navigation__link"><NavLink to="import">Import</NavLink></div>
-                    <div className="sub-navigation__link"><NavLink to="download">Download</NavLink></div>
-                </div>
+                <nav className="sub-navigation">
+                    <NavLink to="record">Record</NavLink>
+                    <NavLink to="review">Review</NavLink>
+                    <NavLink to="voice-assignments">Voice Assignments</NavLink>
+                    <NavLink to="review-assignments">Review Assignments</NavLink>
+                    <NavLink to="reports">Reports</NavLink>
+                    <NavLink to="users">Users</NavLink>
+                    <NavLink to="import">Import</NavLink>
+                    <NavLink to="download">Download</NavLink>
+                </nav>
             </div>
             <Outlet />
         </div>
     );
 }
-
-// TODO: Investigate using custom hooks for the store (see: https://youtu.be/MFj_S0Nof90):
-// function useStore<T>(setState: React.Dispatch<React.SetStateAction<T>>) {
-//
-// }
