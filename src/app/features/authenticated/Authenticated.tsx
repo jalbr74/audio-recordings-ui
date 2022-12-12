@@ -1,19 +1,13 @@
-import React, { useState } from 'react';
-import { AuthenticatedState, AuthenticatedStore } from './Authenticated.store';
+import React from 'react';
+import { useAuthenticatedStore } from './Authenticated.store';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import './Authenticated.scss';
 import { WorkforceHeader } from '@churchofjesuschrist/eden-workforce-header';
-import { useComponentStore } from '../../shared/utils/component-store.utils';
 import { Primary } from '@churchofjesuschrist/eden-buttons';
 
 export function Authenticated() {
-    const [state, setState] = useState<AuthenticatedState>({
-        message: 'Old Message'
-    });
-    const store = useComponentStore(() => new AuthenticatedStore(setState));
-
+    const [state, store] = useAuthenticatedStore();
     const navigate = useNavigate();
-
 
     if (!state.authenticatedUser) {
         if (state.authenticationFailed) {

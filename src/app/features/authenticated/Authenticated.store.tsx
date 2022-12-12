@@ -2,7 +2,8 @@ import { catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ComponentStore } from '../../shared/utils/component-store.utils';
 import { AuthenticatedUser, AuthenticationError } from '../../shared/services/authenticated-user.types';
-import { AuthenticatedUserService, authenticatedUserService } from '../../shared/services/authenticated-user.service';
+import { authenticatedUserService } from '../../shared/services/authenticated-user.service';
+import { useEffect, useMemo, useState } from 'react';
 
 export interface ErrorState {
     message: string;
@@ -24,10 +25,6 @@ export interface AuthenticatedState {
 }
 
 export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
-    override init() {
-        this.fetchAuthenticatedUser();
-    }
-
     setProgressState(progressState: ProgressState) {
         this.setState((prevState: AuthenticatedState) => {
             return { ...prevState, progressState }
@@ -93,4 +90,27 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
             })
         );
     });
+}
+
+/**
+ * Provides a handy hook for making working with this store more convenient.
+ */
+export function useAuthenticatedStore(): [AuthenticatedState, AuthenticatedStore] {
+    const initialState: AuthenticatedState = {
+        message: 'Old Message'
+    };
+
+    const [state, setState] = useState(initialState);
+    const store = useMemo(() => new AuthenticatedStore(setState), []);
+
+    useEffect(() => {
+        const subscription = store.subscribe();
+
+        // Perform any store initialization:
+        store.fetchAuthenticatedUser();
+
+        return () => subscription.unsubscribe();
+    }, [store]);
+
+    return [state, store];
 }
