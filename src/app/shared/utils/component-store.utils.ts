@@ -44,7 +44,7 @@ export class ComponentStore<T> {
  * const [state, setState] = useState<MyComponentState>({});
  * const store = useStore(() => new MyComponentStore(setState));
  */
-export function useStore<T extends ComponentStore<any>>(initialState: () => T): T {
+export function useComponentStore<T extends ComponentStore<any>>(initialState: () => T): T {
     const [store] = useState(initialState);
 
     useEffect(() => {

@@ -15,6 +15,7 @@ export interface ProgressState {
 }
 
 export interface AuthenticatedState {
+    message: string;
     authenticationAttempted?: boolean;
     authenticationFailed?: boolean;
     authenticatedUser?: AuthenticatedUser;
@@ -53,6 +54,12 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
     setAuthenticationFailed() {
         this.setState((prevState: AuthenticatedState) => {
             return { ...prevState, authenticationFailed: true }
+        });
+    }
+
+    setMessage(newMessage: string) {
+        this.setState((prevState: AuthenticatedState) => {
+            return { ...prevState, message: newMessage }
         });
     }
 
