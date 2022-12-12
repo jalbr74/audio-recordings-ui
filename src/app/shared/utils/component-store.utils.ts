@@ -29,4 +29,10 @@ export class ComponentStore<T> {
     subscribe(): Subscription {
         return combineLatest(this.effects).subscribe();
     }
+
+    /**
+     * Subclasses can override this for first-time initialization.
+     */
+    init(): void {
+    }
 }

@@ -25,6 +25,10 @@ export interface AuthenticatedState {
 }
 
 export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
+    init() {
+        this.fetchAuthenticatedUser();
+    }
+
     setProgressState(progressState: ProgressState) {
         this.setState((prevState: AuthenticatedState) => {
             return { ...prevState, progressState }
@@ -122,7 +126,10 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
 // })
 
 // TODO: Make this generic, so we don't use AuthenticatedState or AuthenticatedStore
-export function useComponentStore(ComponentStoreConstructor: any, initialState: any, initializeStoreFn: any): [AuthenticatedState, AuthenticatedStore] {
+export function useComponentStore<StateType, StoreType>(
+    initialState: StateType,
+    ComponentStoreConstructor: any
+): [StateType, StoreType] {
     const [state, setState] = useState(initialState);
     const store = useMemo(() => new ComponentStoreConstructor(setState), []);
 
@@ -130,7 +137,7 @@ export function useComponentStore(ComponentStoreConstructor: any, initialState: 
         const subscription = store.subscribe();
 
         // Perform any store initialization:
-        initializeStoreFn(store);
+        store.init();
 
         return () => subscription.unsubscribe();
     }, [store]);

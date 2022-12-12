@@ -22,9 +22,8 @@ export function Authenticated() {
 
     // TODO: Make this work:
     //  Do we need to provide the initial state here, or can it be provided in the AuthenticatedStore?
-    const [state, store] = useComponentStore(AuthenticatedStore, { message: 'Old Message' }, (store: AuthenticatedStore) => {
-        store.fetchAuthenticatedUser();
-    });
+
+    const [state, store] = useComponentStore<AuthenticatedState, AuthenticatedStore>({ message: 'Old Message' } as AuthenticatedState, AuthenticatedStore);
 
     // const [state, store] = useAuthenticatedStore();
     const navigate = useNavigate();
