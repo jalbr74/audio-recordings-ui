@@ -6,12 +6,25 @@ import { WorkforceHeader } from '@churchofjesuschrist/eden-workforce-header';
 import { Primary } from '@churchofjesuschrist/eden-buttons';
 
 export function Authenticated() {
-    const [state, store] = useComponentStore(
-        {
-            message: 'Old Message'
-        },
-        (setState: React.Dispatch<React.SetStateAction<AuthenticatedState>>) => new AuthenticatedStore(setState)
-    );
+    // const [state, store] = useComponentStore({
+    //     // storeConstructor: (setState: React.Dispatch<React.SetStateAction<AuthenticatedState>>) => new AuthenticatedStore(setState),
+    //     type: AuthenticatedStore,
+    //
+    //     initialState: {
+    //         message: 'Old Message'
+    //     },
+    //     init: (store: AuthenticatedStore) => {
+    //         store.fetchAuthenticatedUser();
+    //     }
+    // });
+
+    // const [state, store] = useComponentStore(AuthenticatedStore);
+
+    // TODO: Make this work:
+    //  Do we need to provide the initial state here, or can it be provided in the AuthenticatedStore?
+    const [state, store] = useComponentStore(AuthenticatedStore, { message: 'Old Message' }, (store: AuthenticatedStore) => {
+        store.fetchAuthenticatedUser();
+    });
 
     // const [state, store] = useAuthenticatedStore();
     const navigate = useNavigate();

@@ -115,15 +115,22 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
 //     return [state, store];
 // }
 
-export function useComponentStore(initialState: AuthenticatedState, constructorFn: (setState: React.Dispatch<React.SetStateAction<AuthenticatedState>>) => AuthenticatedStore): [AuthenticatedState, AuthenticatedStore] {
+// config: {
+//     initialState: AuthenticatedState,
+//         storeConstructor: (setState: React.Dispatch<React.SetStateAction<AuthenticatedState>>) => AuthenticatedStore,
+//         init: (store: AuthenticatedStore) => void
+// })
+
+// TODO: Make this generic, so we don't use AuthenticatedState or AuthenticatedStore
+export function useComponentStore(ComponentStoreConstructor: any, initialState: any, initializeStoreFn: any): [AuthenticatedState, AuthenticatedStore] {
     const [state, setState] = useState(initialState);
-    const store = useMemo(() => constructorFn(setState), []);
+    const store = useMemo(() => new ComponentStoreConstructor(setState), []);
 
     useEffect(() => {
         const subscription = store.subscribe();
 
         // Perform any store initialization:
-        store.fetchAuthenticatedUser();
+        initializeStoreFn(store);
 
         return () => subscription.unsubscribe();
     }, [store]);
