@@ -1,5 +1,5 @@
 import { combineLatest, Observable, Subject, Subscription } from 'rxjs';
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 /**
  * Provides a way to create RxJS effects, which are handy when a component wants to communicate with the outside world.
@@ -35,4 +35,24 @@ export class ComponentStore<T> {
      */
     init(): void {
     }
+}
+
+export function useComponentStore<StateType, StoreType extends ComponentStore<StateType>>(
+    initialState: StateType,
+    ComponentStoreConstructor: new (setState: React.Dispatch<React.SetStateAction<StateType>>) => StoreType
+): [StateType, StoreType] {
+
+    const [state, setState] = useState(initialState);
+    const store = useMemo(() => new ComponentStoreConstructor(setState), [ComponentStoreConstructor]);
+
+    useEffect(() => {
+        const subscription = store.subscribe();
+
+        // Perform any store initialization:
+        store.init();
+
+        return () => subscription.unsubscribe();
+    }, [store]);
+
+    return [state, store];
 }

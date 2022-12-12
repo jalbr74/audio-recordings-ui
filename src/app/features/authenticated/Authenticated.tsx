@@ -1,31 +1,13 @@
 import React from 'react';
-import { AuthenticatedState, AuthenticatedStore, useComponentStore } from './Authenticated.store';
+import { AuthenticatedStore, INITIAL_STATE } from './Authenticated.store';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import './Authenticated.scss';
 import { WorkforceHeader } from '@churchofjesuschrist/eden-workforce-header';
 import { Primary } from '@churchofjesuschrist/eden-buttons';
+import { useComponentStore } from '../../shared/utils/component-store.utils';
 
 export function Authenticated() {
-    // const [state, store] = useComponentStore({
-    //     // storeConstructor: (setState: React.Dispatch<React.SetStateAction<AuthenticatedState>>) => new AuthenticatedStore(setState),
-    //     type: AuthenticatedStore,
-    //
-    //     initialState: {
-    //         message: 'Old Message'
-    //     },
-    //     init: (store: AuthenticatedStore) => {
-    //         store.fetchAuthenticatedUser();
-    //     }
-    // });
-
-    // const [state, store] = useComponentStore(AuthenticatedStore);
-
-    // TODO: Make this work:
-    //  Do we need to provide the initial state here, or can it be provided in the AuthenticatedStore?
-
-    const [state, store] = useComponentStore<AuthenticatedState, AuthenticatedStore>({ message: 'Old Message' } as AuthenticatedState, AuthenticatedStore);
-
-    // const [state, store] = useAuthenticatedStore();
+    const [state, store] = useComponentStore(INITIAL_STATE, AuthenticatedStore);
     const navigate = useNavigate();
 
     if (!state.authenticatedUser) {

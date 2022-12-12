@@ -3,7 +3,6 @@ import { tap } from 'rxjs/operators';
 import { ComponentStore } from '../../shared/utils/component-store.utils';
 import { AuthenticatedUser, AuthenticationError } from '../../shared/services/authenticated-user.types';
 import { authenticatedUserService } from '../../shared/services/authenticated-user.service';
-import React, { useEffect, useMemo, useState } from 'react';
 
 export interface ErrorState {
     message: string;
@@ -22,6 +21,10 @@ export interface AuthenticatedState {
     authenticatedUser?: AuthenticatedUser;
     errorState?: ErrorState;
     progressState?: ProgressState;
+}
+
+export const INITIAL_STATE: AuthenticatedState = {
+    message: 'Old Message'
 }
 
 export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
@@ -94,53 +97,4 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
             })
         );
     });
-}
-
-/**
- * Provides a handy hook for making working with this store more convenient.
- */
-// export function useAuthenticatedStore(): [AuthenticatedState, AuthenticatedStore] {
-//     const initialState: AuthenticatedState = {
-//         message: 'Old Message'
-//     };
-//
-//     const [state, setState] = useState(initialState);
-//     const store = useMemo(() => new AuthenticatedStore(setState), []);
-//
-//     useEffect(() => {
-//         const subscription = store.subscribe();
-//
-//         // Perform any store initialization:
-//         store.fetchAuthenticatedUser();
-//
-//         return () => subscription.unsubscribe();
-//     }, [store]);
-//
-//     return [state, store];
-// }
-
-// config: {
-//     initialState: AuthenticatedState,
-//         storeConstructor: (setState: React.Dispatch<React.SetStateAction<AuthenticatedState>>) => AuthenticatedStore,
-//         init: (store: AuthenticatedStore) => void
-// })
-
-// TODO: Make this generic, so we don't use AuthenticatedState or AuthenticatedStore
-export function useComponentStore<StateType, StoreType>(
-    initialState: StateType,
-    ComponentStoreConstructor: any
-): [StateType, StoreType] {
-    const [state, setState] = useState(initialState);
-    const store = useMemo(() => new ComponentStoreConstructor(setState), []);
-
-    useEffect(() => {
-        const subscription = store.subscribe();
-
-        // Perform any store initialization:
-        store.init();
-
-        return () => subscription.unsubscribe();
-    }, [store]);
-
-    return [state, store];
 }
