@@ -1,13 +1,14 @@
+import './Authenticated.scss';
+
 import React from 'react';
 import { AuthenticatedStore, INITIAL_STATE } from './Authenticated.store';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import './Authenticated.scss';
 import { WorkforceHeader } from '@churchofjesuschrist/eden-workforce-header';
 import { Primary } from '@churchofjesuschrist/eden-buttons';
 import { useComponentStore } from '../../shared/utils/component-store.utils';
 
 export function Authenticated() {
-    const [state, store] = useComponentStore(INITIAL_STATE, AuthenticatedStore);
+    const [store, state] = useComponentStore(AuthenticatedStore, INITIAL_STATE);
     const navigate = useNavigate();
 
     if (!state.authenticatedUser) {

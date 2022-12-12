@@ -37,11 +37,10 @@ export class ComponentStore<T> {
     }
 }
 
-export function useComponentStore<StateType, StoreType extends ComponentStore<StateType>>(
-    initialState: StateType,
-    ComponentStoreConstructor: new (setState: React.Dispatch<React.SetStateAction<StateType>>) => StoreType
-): [StateType, StoreType] {
-
+export function useComponentStore<StoreType extends ComponentStore<StateType>, StateType>(
+    ComponentStoreConstructor: new (setState: React.Dispatch<React.SetStateAction<StateType>>) => StoreType,
+    initialState: StateType
+): [StoreType, StateType] {
     const [state, setState] = useState(initialState);
     const store = useMemo(() => new ComponentStoreConstructor(setState), [ComponentStoreConstructor]);
 
@@ -54,5 +53,5 @@ export function useComponentStore<StateType, StoreType extends ComponentStore<St
         return () => subscription.unsubscribe();
     }, [store]);
 
-    return [state, store];
+    return [store, state];
 }
