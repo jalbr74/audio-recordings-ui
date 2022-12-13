@@ -1,4 +1,4 @@
-import { combineLatest, Observable, Subject, Subscription } from 'rxjs';
+import { combineLatest, distinctUntilChanged, map, Observable, shareReplay, Subject, Subscription } from 'rxjs';
 import React, { useEffect, useMemo, useState } from 'react';
 
 /**
@@ -13,6 +13,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 export class ComponentStore<T> {
     effects: Observable<any>[] = [];
 
+    stateTracker: Subject<T> = new Subject<T>();
+    state$ = this.stateTracker.asObservable();
+
     /**
      * Saves off the setter returned from a call to the React hook: useState, such as:
      *
@@ -22,9 +25,25 @@ export class ComponentStore<T> {
     }
 
     /**
+     * Creates a selector, which is a way to subscribe to a specific portion of the state, for example:
+     *
+     * message$ = store.select<string>((state: MyState) => state.message);
+     */
+    select<ValueType>(selectorFn: (state: T) => ValueType): Observable<ValueType> {
+        return this.state$.pipe(
+            map(selectorFn),
+            distinctUntilChanged(),
+            shareReplay({
+                refCount: true,
+                bufferSize: 1,
+            })
+        );
+    }
+
+    /**
      * Provides a way for subclasses to define state updaters, such as the following:
      *
-     * setMessage = this.updater<string>((state: MyState, message: string) => {
+     * setMessage = store.updater<string>((state: MyState, message: string) => {
      *     return { ...state, message };
      * });
      */
@@ -35,7 +54,7 @@ export class ComponentStore<T> {
     /**
      * Provides a way for subclasses to define effects, such as the following:
      *
-     *  retrieveMessage = this.effect<void>((origin$: Observable<void>) => {
+     *  retrieveMessage = store.effect<void>((origin$: Observable<void>) => {
      *      return origin$.pipe(
      *          switchMap(() => {
      *              return fromPromise(fetch('/api/message')).pipe(
@@ -80,8 +99,10 @@ export function useComponentStore<StoreType extends ComponentStore<StateType>, S
     initialState: StateType,
     initFn?: (store: StoreType) => void
 ): [StoreType, StateType] {
-    const [state, setState] = useState(initialState);
-    const store = useMemo(() => new ComponentStoreConstructor(setState), [ComponentStoreConstructor]);
+    const [state, setState] = useState<StateType>(initialState);
+    const store = useMemo<StoreType>(() => new ComponentStoreConstructor(setState), [ComponentStoreConstructor]);
+
+    store.stateTracker.next(state);
 
     useEffect(() => {
         const subscription = store.subscribe();
