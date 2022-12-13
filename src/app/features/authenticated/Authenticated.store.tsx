@@ -28,10 +28,6 @@ export const INITIAL_STATE: AuthenticatedState = {
 }
 
 export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
-    init() {
-        this.fetchAuthenticatedUser();
-    }
-
     setProgressState = this.updater<ProgressState>((state: AuthenticatedState, progressState: ProgressState) => {
         return { ...state, progressState };
     });

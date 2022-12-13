@@ -8,7 +8,10 @@ import { Primary } from '@churchofjesuschrist/eden-buttons';
 import { useComponentStore } from '../../shared/utils/component-store.utils';
 
 export function Authenticated() {
-    const [store, state] = useComponentStore(AuthenticatedStore, INITIAL_STATE);
+    const [store, state] = useComponentStore(AuthenticatedStore, INITIAL_STATE, (store: AuthenticatedStore) => {
+        store.fetchAuthenticatedUser();
+    });
+
     const navigate = useNavigate();
 
     if (!state.authenticatedUser) {

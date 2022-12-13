@@ -68,12 +68,6 @@ export class ComponentStore<T> {
     subscribe(): Subscription {
         return combineLatest(this.effects).subscribe();
     }
-
-    /**
-     * Subclasses can override this for first-time initialization.
-     */
-    init(): void {
-    }
 }
 
 /**
@@ -83,7 +77,8 @@ export class ComponentStore<T> {
  */
 export function useComponentStore<StoreType extends ComponentStore<StateType>, StateType>(
     ComponentStoreConstructor: new (setState: React.Dispatch<React.SetStateAction<StateType>>) => StoreType,
-    initialState: StateType
+    initialState: StateType,
+    initFn?: (store: StoreType) => void
 ): [StoreType, StateType] {
     const [state, setState] = useState(initialState);
     const store = useMemo(() => new ComponentStoreConstructor(setState), [ComponentStoreConstructor]);
@@ -91,8 +86,8 @@ export function useComponentStore<StoreType extends ComponentStore<StateType>, S
     useEffect(() => {
         const subscription = store.subscribe();
 
-        // Perform any store initialization:
-        store.init();
+        // Perform any store initialization now that the subscription is active:
+        initFn?.(store);
 
         return () => subscription.unsubscribe();
     }, [store]);
