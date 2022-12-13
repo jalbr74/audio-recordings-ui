@@ -17,6 +17,10 @@ export class ComponentStore<T> {
         console.log('ComponentStore constructed');
     }
 
+    updater<ValueType>(updaterFn: (state: T, value: ValueType) => T): (value: ValueType) => void {
+        return (value: ValueType) => this.setState((state: T) => updaterFn(state, value));
+    }
+
     effect<ObservableType>(generator: (source$: Observable<ObservableType>) => Observable<unknown>) {
         const origin$ = new Subject<ObservableType>();
         this.effects.push(generator(origin$));
@@ -37,6 +41,11 @@ export class ComponentStore<T> {
     }
 }
 
+/**
+ * Provides a way to simplify the use of ComponentStore into a handy hook so it can be used as follows:
+ *
+ * const [store, state] = useComponentStore(AuthenticatedStore, INITIAL_STATE);
+ */
 export function useComponentStore<StoreType extends ComponentStore<StateType>, StateType>(
     ComponentStoreConstructor: new (setState: React.Dispatch<React.SetStateAction<StateType>>) => StoreType,
     initialState: StateType

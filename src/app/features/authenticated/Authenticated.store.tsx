@@ -61,11 +61,9 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
         });
     }
 
-    setMessage(newMessage: string) {
-        this.setState((prevState: AuthenticatedState) => {
-            return { ...prevState, message: newMessage }
-        });
-    }
+    setMessage = this.updater<string>((state: AuthenticatedState, message: string) => {
+        return { ...state, message }
+    });
 
     fetchAuthenticatedUser = this.effect<void>((origin$: Observable<void>) => {
         return origin$.pipe(
