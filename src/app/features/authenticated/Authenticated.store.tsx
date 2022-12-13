@@ -34,7 +34,7 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
 
     setProgressState(progressState: ProgressState) {
         this.setState((prevState: AuthenticatedState) => {
-            return { ...prevState, progressState }
+            return { ...prevState, progressState };
         });
     }
 
@@ -45,24 +45,22 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
                     inProgress: false,
                     message: ''
                 }
-            }
+            };
         });
     }
 
     setAuthenticatedUser(authenticatedUser: AuthenticatedUser) {
         this.setState((prevState: AuthenticatedState) => {
-            return { ...prevState, authenticatedUser }
+            return { ...prevState, authenticatedUser };
         });
     }
 
-    setAuthenticationFailed() {
-        this.setState((prevState: AuthenticatedState) => {
-            return { ...prevState, authenticationFailed: true }
-        });
-    }
+    setAuthenticationFailed = this.updater((state: AuthenticatedState) => {
+        return { ...state, authenticationFailed: true };
+    });
 
-    setMessage = this.updater<string>((state: AuthenticatedState, message: string) => {
-        return { ...state, message }
+    setMessage = this.updater<string>((state: AuthenticatedState, message: string | undefined) => {
+        return { ...state, message } as AuthenticatedState;
     });
 
     fetchAuthenticatedUser = this.effect<void>((origin$: Observable<void>) => {
