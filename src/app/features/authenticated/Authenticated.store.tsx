@@ -3,6 +3,7 @@ import { tap } from 'rxjs/operators';
 import { ComponentStore } from '../../shared/utils/component-store.utils';
 import { AuthenticatedUser, AuthenticationError } from '../../shared/services/authenticated-user.types';
 import { authenticatedUserService } from '../../shared/services/authenticated-user.service';
+import React from 'react';
 
 export interface ErrorState {
     message: string;
@@ -28,6 +29,16 @@ export const INITIAL_STATE: AuthenticatedState = {
 }
 
 export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
+    constructor(protected setState: React.Dispatch<React.SetStateAction<AuthenticatedState>>) {
+        super(setState);
+
+        this.message$.subscribe((message: string) => {
+            console.log('New message: ' + message);
+        });
+    }
+
+    message$ = this.select<string>((state: AuthenticatedState) => state.message);
+
     setProgressState = this.updater<ProgressState>((state: AuthenticatedState, progressState: ProgressState) => {
         return { ...state, progressState };
     });

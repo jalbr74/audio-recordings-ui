@@ -48,7 +48,12 @@ export class ComponentStore<T> {
      * });
      */
     updater<ValueType>(updaterFn: (state: T, value: ValueType) => T): (value?: ValueType) => void {
-        return (value?: ValueType) => this.setState((state: T) => updaterFn(state, value as ValueType));
+        return (value?: ValueType) => this.setState((state: T) => {
+            const newState = updaterFn(state, value as ValueType);
+            this.stateTracker.next(newState);
+
+            return newState;
+        });
     }
 
     /**
@@ -101,8 +106,6 @@ export function useComponentStore<StoreType extends ComponentStore<StateType>, S
 ): [StoreType, StateType] {
     const [state, setState] = useState<StateType>(initialState);
     const store = useMemo<StoreType>(() => new ComponentStoreConstructor(setState), [ComponentStoreConstructor]);
-
-    store.stateTracker.next(state);
 
     useEffect(() => {
         const subscription = store.subscribe();
