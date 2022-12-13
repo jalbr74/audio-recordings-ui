@@ -1,5 +1,5 @@
 import { combineLatest, Observable, Subject, Subscription } from 'rxjs';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 /**
  * Provides a way to create RxJS effects, which are handy when a component wants to communicate with the outside world.
@@ -15,6 +15,10 @@ export class ComponentStore<T> {
 
     constructor(protected setState: React.Dispatch<React.SetStateAction<T>>) {
         console.log('ComponentStore constructed');
+    }
+
+    updater<ValueType>(updaterFn: (state: T, value: ValueType) => T): (value: ValueType) => void {
+        return (value: ValueType) => this.setState((state: T) => updaterFn(state, value));
     }
 
     effect<ObservableType>(generator: (source$: Observable<ObservableType>) => Observable<unknown>) {
@@ -38,24 +42,25 @@ export class ComponentStore<T> {
 }
 
 /**
- * Custom hook for making it easier to work with ComponentStore implementations.
- * Components will typically do something like this:
+ * Provides a way to simplify the use of ComponentStore into a handy hook so it can be used as follows:
  *
- * const [state, setState] = useState<MyComponentState>({});
- * const store = useStore(() => new MyComponentStore(setState));
+ * const [store, state] = useComponentStore(AuthenticatedStore, INITIAL_STATE);
  */
-export function useStore<T extends ComponentStore<any>>(initialState: () => T): T {
-    const [store] = useState(initialState);
+export function useComponentStore<StoreType extends ComponentStore<StateType>, StateType>(
+    ComponentStoreConstructor: new (setState: React.Dispatch<React.SetStateAction<StateType>>) => StoreType,
+    initialState: StateType
+): [StoreType, StateType] {
+    const [state, setState] = useState(initialState);
+    const store = useMemo(() => new ComponentStoreConstructor(setState), [ComponentStoreConstructor]);
 
     useEffect(() => {
-        // TODO: Why is this called twice in development (when <React.StrictMode> is used)?
-        // console.log('useEffect in useStore called');
-
         const subscription = store.subscribe();
+
+        // Perform any store initialization:
         store.init();
 
         return () => subscription.unsubscribe();
     }, [store]);
 
-    return store;
+    return [store, state];
 }

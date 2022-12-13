@@ -2,7 +2,7 @@ import { catchError, EMPTY, map, Observable, switchMap } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ComponentStore } from '../../shared/utils/component-store.utils';
 import { AuthenticatedUser, AuthenticationError } from '../../shared/services/authenticated-user.types';
-import { AuthenticatedUserService, authenticatedUserService } from '../../shared/services/authenticated-user.service';
+import { authenticatedUserService } from '../../shared/services/authenticated-user.service';
 
 export interface ErrorState {
     message: string;
@@ -15,6 +15,7 @@ export interface ProgressState {
 }
 
 export interface AuthenticatedState {
+    message: string;
     authenticationAttempted?: boolean;
     authenticationFailed?: boolean;
     authenticatedUser?: AuthenticatedUser;
@@ -22,8 +23,12 @@ export interface AuthenticatedState {
     progressState?: ProgressState;
 }
 
+export const INITIAL_STATE: AuthenticatedState = {
+    message: 'Old Message'
+}
+
 export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
-    override init() {
+    init() {
         this.fetchAuthenticatedUser();
     }
 
@@ -55,6 +60,10 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
             return { ...prevState, authenticationFailed: true }
         });
     }
+
+    setMessage = this.updater<string>((state: AuthenticatedState, message: string) => {
+        return { ...state, message }
+    });
 
     fetchAuthenticatedUser = this.effect<void>((origin$: Observable<void>) => {
         return origin$.pipe(

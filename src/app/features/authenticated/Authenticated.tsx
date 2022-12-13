@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { AuthenticatedState, AuthenticatedStore } from './Authenticated.store';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import './Authenticated.scss';
+
+import React from 'react';
+import { AuthenticatedStore, INITIAL_STATE } from './Authenticated.store';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { WorkforceHeader } from '@churchofjesuschrist/eden-workforce-header';
-import { useStore } from '../../shared/utils/component-store.utils';
+import { Primary } from '@churchofjesuschrist/eden-buttons';
+import { useComponentStore } from '../../shared/utils/component-store.utils';
 
 export function Authenticated() {
-    const [state, setState] = useState<AuthenticatedState>({});
-    const store = useStore(() => new AuthenticatedStore(setState));
-
+    const [store, state] = useComponentStore(AuthenticatedStore, INITIAL_STATE);
     const navigate = useNavigate();
 
     if (!state.authenticatedUser) {
@@ -22,8 +22,19 @@ export function Authenticated() {
         return <div>Checking authentication...</div>;
     }
 
+    function changeMessage() {
+        store.setMessage('New Message');
+    }
+
     return (
         <div className="Authenticated">
+            <div>
+                Message: {state.message}
+            </div>
+            <div>
+                <Primary onClick={changeMessage}>Change Message</Primary>
+            </div>
+
             <div className="global-navigation">
                 <div className="global-navigation__wordmark">
                     <a className="wordmark--mainLogoLink" href="https://www.churchofjesuschrist.org?lang=eng"
