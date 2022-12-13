@@ -17,8 +17,8 @@ export class ComponentStore<T> {
         console.log('ComponentStore constructed');
     }
 
-    updater<ValueType>(updaterFn: (state: T, value?: ValueType) => T): (value?: ValueType) => void {
-        return (value?: ValueType) => this.setState((state: T) => updaterFn(state, value));
+    updater<ValueType>(updaterFn: (state: T, value: ValueType) => T): (value?: ValueType) => void {
+        return (value: ValueType) => this.setState((state: T) => updaterFn(state, value));
     }
 
     effect<ObservableType>(generator: (source$: Observable<ObservableType>) => Observable<unknown>) {

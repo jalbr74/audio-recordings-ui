@@ -59,8 +59,8 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
         return { ...state, authenticationFailed: true };
     });
 
-    setMessage = this.updater<string>((state: AuthenticatedState, message: string | undefined) => {
-        return { ...state, message } as AuthenticatedState;
+    setMessage = this.updater<string>((state: AuthenticatedState, message: string) => {
+        return { ...state, message };
     });
 
     fetchAuthenticatedUser = this.effect<void>((origin$: Observable<void>) => {
