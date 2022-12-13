@@ -13,14 +13,46 @@ import React, { useEffect, useMemo, useState } from 'react';
 export class ComponentStore<T> {
     effects: Observable<any>[] = [];
 
+    /**
+     * Saves off the setter returned from a call to the React hook: useState, such as:
+     *
+     * const [state, setState] = useState<MyComponentState>({});
+     */
     constructor(protected setState: React.Dispatch<React.SetStateAction<T>>) {
-        console.log('ComponentStore constructed');
     }
 
+    /**
+     * Provides a way for subclasses to define state updaters, such as the following:
+     *
+     * setMessage = this.updater<string>((state: MyState, message: string) => {
+     *     return { ...state, message };
+     * });
+     */
     updater<ValueType>(updaterFn: (state: T, value: ValueType) => T): (value?: ValueType) => void {
-        return (value: ValueType) => this.setState((state: T) => updaterFn(state, value));
+        return (value?: ValueType) => this.setState((state: T) => updaterFn(state, value as ValueType));
     }
 
+    /**
+     * Provides a way for subclasses to define effects, such as the following:
+     *
+     *  retrieveMessage = this.effect<void>((origin$: Observable<void>) => {
+     *      return origin$.pipe(
+     *          switchMap(() => {
+     *              return fromPromise(fetch('/api/message')).pipe(
+     *                  switchMap((response: Response) => {
+     *                      return response.json();
+     *                  }),
+     *                  catchError((error) => {
+     *                      return EMPTY;
+     *                  })
+     *              )
+     *          }),
+     *          tap((message: string) => {
+     *              this.setMessage(message);
+     *          })
+     *      );
+     *  });
+     */
     effect<ObservableType>(generator: (source$: Observable<ObservableType>) => Observable<unknown>) {
         const origin$ = new Subject<ObservableType>();
         this.effects.push(generator(origin$));
@@ -30,6 +62,9 @@ export class ComponentStore<T> {
         });
     }
 
+    /**
+     * Provides a way to make the effects, defined by this component store, active.
+     */
     subscribe(): Subscription {
         return combineLatest(this.effects).subscribe();
     }

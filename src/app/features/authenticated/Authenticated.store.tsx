@@ -32,30 +32,24 @@ export class AuthenticatedStore extends ComponentStore<AuthenticatedState> {
         this.fetchAuthenticatedUser();
     }
 
-    setProgressState(progressState: ProgressState) {
-        this.setState((prevState: AuthenticatedState) => {
-            return { ...prevState, progressState };
-        });
-    }
+    setProgressState = this.updater<ProgressState>((state: AuthenticatedState, progressState: ProgressState) => {
+        return { ...state, progressState };
+    });
 
-    clearProgressState() {
-        this.setState((prevState: AuthenticatedState) => {
-            return {
-                ...prevState, progressState: {
-                    inProgress: false,
-                    message: ''
-                }
-            };
-        });
-    }
+    clearProgressState = this.updater<void>((state: AuthenticatedState) => {
+        return {
+            ...state, progressState: {
+                inProgress: false,
+                message: ''
+            }
+        };
+    });
 
-    setAuthenticatedUser(authenticatedUser: AuthenticatedUser) {
-        this.setState((prevState: AuthenticatedState) => {
-            return { ...prevState, authenticatedUser };
-        });
-    }
+    setAuthenticatedUser = this.updater<AuthenticatedUser>((state: AuthenticatedState, authenticatedUser: AuthenticatedUser) => {
+        return { ...state, authenticatedUser };
+    });
 
-    setAuthenticationFailed = this.updater((state: AuthenticatedState) => {
+    setAuthenticationFailed = this.updater<void>((state: AuthenticatedState) => {
         return { ...state, authenticationFailed: true };
     });
 
